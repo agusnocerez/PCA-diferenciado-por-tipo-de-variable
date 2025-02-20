@@ -1,0 +1,26 @@
+library(FactoMineR)
+library(readxl)
+library(dplyr)
+library(factoextra)
+
+#Los datos utilizados los dejo cargados en el repositorio bajo el nombre "datos", todos los datos de este dataframe son de tipo númerico para poder hacer el PCA.
+
+#Armamos el analisis de componentes principales y su gráfico#
+res.pca <- PCA(datos, scale.unit = TRUE, ncp = 5, graph = TRUE)
+dimdesc(res.pca, axes=c(1,2))
+
+#Para poder diferenciar el origen de nuestras variables en el gráfico PCA primero tenemos que armar un vector para identificar el origen/tipo, para este caso o las variables son medidas en el suelo o en el agua de riego#
+
+tipo_variable <- c("suelo", "suelo", "suelo", "suelo","suelo","agua", "agua", "agua")
+
+tipo_variable <- as.factor(tipo_variable)
+
+# Modificar los datos
+names(tipo_variable) <- colnames(datos)  # Asigna los nombres de las variables
+
+# Definimos el color para cada tipo de variable
+colores <- c("suelo" = "#8B6508", "agua" = "#1874CD")
+
+# Graficar PCA diferenciando por tipo de variable
+fviz_pca_var(res.pca, col.var = tipo_variable, palette = colores, repel = TRUE) 
+
